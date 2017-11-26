@@ -1,6 +1,6 @@
 
 #import "RNLaunchDarkly.h"
-#import <Darkly/DarklyConstants.h>
+#import <DarklyConstants.h>
 
 @implementation RNLaunchDarkly
 
@@ -22,35 +22,35 @@ RCT_EXPORT_METHOD(configure:(NSString*)apiKey options:(NSDictionary*)options) {
     LDConfigBuilder *config = [[LDConfigBuilder alloc] init];
     [config withMobileKey:apiKey];
 
-    LDUserBuilder *user = [[LDUserBuilder alloc] init];
-    user = [user withKey:key];
+    LDUserBuilder *builder = [[LDUserBuilder alloc] init];
+    builder = [builder withKey:key];
 
     if (firstName) {
-        user = [user withFirstName:firstName];
+        builder = [builder withFirstName:firstName];
     }
 
     if (lastName) {
-        user = [user withLastName:lastName];
+        builder = [builder withLastName:lastName];
     }
 
     if (email) {
-        user = [user withEmail:email];
+        builder = [builder withEmail:email];
     }
 
     if (organization) {
-        user = [user withCustomString:@"organization" value:organization];
+        builder = [builder withCustomString:@"organization" value:organization];
     }
 
     if([isAnonymous isEqualToNumber:[NSNumber numberWithBool:YES]]) {
-        user = [user withAnonymous:TRUE];
+        builder = [builder withAnonymous:TRUE];
     }
 
     if ( self.user ) {
-        [[LDClient sharedInstance] updateUser:user];
+        [[LDClient sharedInstance] updateUser:builder];
         return;
     }
 
-    self.user = [user build];
+    self.user = [builder build];
 
     [[NSNotificationCenter defaultCenter]
      addObserver:self
@@ -58,7 +58,7 @@ RCT_EXPORT_METHOD(configure:(NSString*)apiKey options:(NSDictionary*)options) {
      name:kLDFlagConfigChangedNotification
      object:nil];
 
-    [[LDClient sharedInstance] start:config userBuilder:user];
+    [[LDClient sharedInstance] start:config userBuilder:builder];
 }
 
 RCT_EXPORT_METHOD(boolVariation:(NSString*)flagName callback:(RCTResponseSenderBlock)callback) {

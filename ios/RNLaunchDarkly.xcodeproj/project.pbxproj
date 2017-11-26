@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0A5F71CC1FCB5CF400B32C7C /* libRNLaunchDarkly.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 134814201AA4EA6300B7C361 /* libRNLaunchDarkly.a */; };
 		B3E7B58A1CC2AC0600A0062D /* RNLaunchDarkly.m in Sources */ = {isa = PBXBuildFile; fileRef = B3E7B5891CC2AC0600A0062D /* RNLaunchDarkly.m */; };
-		D6A2B3E91EC8F9DC00E74EBF /* Darkly.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D6A2B3E81EC8F9DC00E74EBF /* Darkly.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -27,7 +27,6 @@
 		134814201AA4EA6300B7C361 /* libRNLaunchDarkly.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libRNLaunchDarkly.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		B3E7B5881CC2AC0600A0062D /* RNLaunchDarkly.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNLaunchDarkly.h; sourceTree = "<group>"; };
 		B3E7B5891CC2AC0600A0062D /* RNLaunchDarkly.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNLaunchDarkly.m; sourceTree = "<group>"; };
-		D6A2B3E81EC8F9DC00E74EBF /* Darkly.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Darkly.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -35,7 +34,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D6A2B3E91EC8F9DC00E74EBF /* Darkly.framework in Frameworks */,
+				0A5F71CC1FCB5CF400B32C7C /* libRNLaunchDarkly.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -53,7 +52,6 @@
 		58B511D21A9E6C8500147676 = {
 			isa = PBXGroup;
 			children = (
-				D6A2B3E81EC8F9DC00E74EBF /* Darkly.framework */,
 				B3E7B5881CC2AC0600A0062D /* RNLaunchDarkly.h */,
 				B3E7B5891CC2AC0600A0062D /* RNLaunchDarkly.m */,
 				134814211AA4EA7D00B7C361 /* Products */,
