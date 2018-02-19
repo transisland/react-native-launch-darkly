@@ -2,6 +2,7 @@
 package com.reactlibrary;
 
 import android.app.Application;
+import android.app.Activity;
 import android.util.Log;
 
 import com.facebook.react.bridge.Arguments;
@@ -73,13 +74,20 @@ public class RNLaunchDarklyModule extends ReactContextBaseJavaModule {
 
     user = userBuilder.build();
 
-    Application application = reactContext.getCurrentActivity().getApplication();
+    Activity activity = getCurrentActivity();
 
-    if (application != null) {
-      ldClient = LDClient.init(application, ldConfig, user, 0);
+    if (activity != null) {
+      Application application = activity.getApplication();
+
+      if (application != null) {
+        ldClient = LDClient.init(application, ldConfig, user, 0);
+      } else {
+        Log.d("RNLaunchDarklyModule", "Couldn't init RNLaunchDarklyModule cause application was null");
+      }
     } else {
-      Log.d("RNLaunchDarklyModule", "Couldn't init RNLaunchDarklyModule cause application was null");
+      Log.d("RNLaunchDarklyModule", "Couldn't init RNLaunchDarklyModule cause activity was null");
     }
+
   }
 
   @ReactMethod
