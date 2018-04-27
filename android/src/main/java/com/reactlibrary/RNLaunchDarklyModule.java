@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.util.Log;
 
 import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
@@ -37,8 +38,7 @@ public class RNLaunchDarklyModule extends ReactContextBaseJavaModule {
     return "RNLaunchDarkly";
   }
 
-  @ReactMethod
-  public void configure(String apiKey, ReadableMap options) {
+  private void configure(String apiKey, ReadableMap options) {
     LDConfig ldConfig = new LDConfig.Builder()
             .setMobileKey(apiKey)
             .build();
@@ -70,6 +70,17 @@ public class RNLaunchDarklyModule extends ReactContextBaseJavaModule {
       ldClient.identify(user);
     } else {
       initLdClient(ldConfig);
+    }
+  }
+
+  @ReactMethod
+  public void configure(String apiKey, ReadableMap options, Promise promise) {
+    try {
+      configure(apiKey, options);
+    } catch(Exception e) {
+      promise.reject(e);
+    } finally {
+      promise.resolve(true);
     }
   }
 
