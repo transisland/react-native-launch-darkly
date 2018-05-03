@@ -6,7 +6,7 @@ export interface LaunchDarklyUser {
     isAnonymous?: boolean;
   }
 
-export function configure(apiKey: string, user: LaunchDarklyUser): void;
+export function configure(apiKey: string, user: LaunchDarklyUser): Promise;
 export function boolVariation(flagName: string, fallback: boolean, callback: (status: boolean) => any): boolean;
 export function stringVariation(flagName: string, fallback: string, callback: (status: string) => void): string;
 export function addFeatureFlagChangeListener(flagName: string, callback: (flagName: string) => void): void;
