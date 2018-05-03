@@ -9,7 +9,12 @@
     return @[@"FeatureFlagChanged"];
 }
 
-RCT_EXPORT_METHOD(configure: (NSString *)apiKey options:(NSDictionary *)options)
+RCT_EXPORT_METHOD(configure
+                  :(NSString *)apiKey
+                  options:(NSDictionary *)options
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject
+                 )
 {
     NSLog(@"configure with %@", options);
     
@@ -18,7 +23,7 @@ RCT_EXPORT_METHOD(configure: (NSString *)apiKey options:(NSDictionary *)options)
     NSString* lastName      = options[@"lastName"];
     NSString* email         = options[@"email"];
     NSNumber* isAnonymous   = options[@"isAnonymous"];
-    NSString* organization   = options[@"organization"];
+    NSString* organization  = options[@"organization"];
     
     LDConfig *config = [[LDConfig alloc] initWithMobileKey:apiKey];
     
@@ -47,6 +52,7 @@ RCT_EXPORT_METHOD(configure: (NSString *)apiKey options:(NSDictionary *)options)
     
     if ( self.user ) {
         [[LDClient sharedInstance] updateUser:builder];
+        resolve(@"true");
         return;
     }
     
@@ -59,6 +65,7 @@ RCT_EXPORT_METHOD(configure: (NSString *)apiKey options:(NSDictionary *)options)
      object:nil];
     
     [[LDClient sharedInstance] start:config withUserBuilder:builder];
+    resolve(@"true");
 }
 
 RCT_EXPORT_METHOD(boolVariation:(NSString*)flagName fallback:(BOOL)fallback callback:(RCTResponseSenderBlock)callback)
