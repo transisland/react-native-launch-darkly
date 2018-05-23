@@ -1,4 +1,3 @@
-
 package com.reactlibrary;
 
 import android.app.Application;
@@ -21,6 +20,8 @@ import com.launchdarkly.android.LDUser;
 import com.launchdarkly.android.LaunchDarklyException;
 
 import java.util.Collections;
+import java.util.concurrent.Future;
+import java.util.concurrent.ExecutionException;
 
 public class RNLaunchDarklyModule extends ReactContextBaseJavaModule {
 
@@ -38,7 +39,7 @@ public class RNLaunchDarklyModule extends ReactContextBaseJavaModule {
     return "RNLaunchDarkly";
   }
 
-  private void configure(String apiKey, ReadableMap options) {
+  private void configure(String apiKey, ReadableMap options) throws Exception {
     LDConfig ldConfig = new LDConfig.Builder()
             .setMobileKey(apiKey)
             .build();
@@ -77,31 +78,31 @@ public class RNLaunchDarklyModule extends ReactContextBaseJavaModule {
   public void configure(String apiKey, ReadableMap options, Promise promise) {
     try {
       configure(apiKey, options);
-    } catch(Exception e) {
-      promise.reject(e);
-    } finally {
       promise.resolve(true);
+    } catch (Exception e) {
+      Log.d("RNLaunchDarklyModule", e.getMessage());
+      promise.reject(e);
     }
   }
 
-  private void initLdClient(LDConfig ldConfig) {
+  private void initLdClient(LDConfig ldConfig) throws Exception {
     Activity activity = getCurrentActivity();
     if (activity == null) {
-      Log.d("RNLaunchDarklyModule", "Couldn't init RNLaunchDarklyModule cause activity was null");
-      return;
+      throw new Exception("Couldn't init RNLaunchDarklyModule cause activity was null");
     }
 
     Application application = activity.getApplication();
 
-    if (application != null) {
-      ldClient = LDClient.init(application, ldConfig, user, 0);
-    } else {
-      Log.d("RNLaunchDarklyModule", "Couldn't init RNLaunchDarklyModule cause application was null");
+    if (application == null) {
+      throw new Exception("Couldn't init RNLaunchDarklyModule cause application was null");
     }
+
+    Future<LDClient> future = LDClient.init(application, ldConfig, user);
+    ldClient = future.get();
   }
 
   @ReactMethod
-  public void addFeatureFlagChangeListener (String flagName) {
+  public void addFeatureFlagChangeListener(String flagName) {
     FeatureFlagChangeListener listener = new FeatureFlagChangeListener() {
       @Override
       public void onFeatureFlagChange(String flagKey) {
@@ -124,13 +125,13 @@ public class RNLaunchDarklyModule extends ReactContextBaseJavaModule {
 
   @ReactMethod
   public void boolVariation(String flagName, Boolean fallback, Callback callback) {
-    Boolean variationResult = ldClient.boolVariation(flagName, fallback);
+    Boolean variationResult = ldClient != null ? ldClient.boolVariation(flagName, fallback) : fallback;
     callback.invoke(variationResult);
   }
 
   @ReactMethod
   public void stringVariation(String flagName, String fallback, Callback callback) {
-    String variationResult = ldClient.stringVariation(flagName, fallback);
+    String variationResult = ldClient != null ? ldClient.stringVariation(flagName, fallback) : fallback;
     callback.invoke(variationResult);
   }
 }
