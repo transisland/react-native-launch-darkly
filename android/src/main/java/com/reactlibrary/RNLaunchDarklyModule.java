@@ -97,12 +97,8 @@ public class RNLaunchDarklyModule extends ReactContextBaseJavaModule {
       throw new Exception("Couldn't init RNLaunchDarklyModule cause application was null");
     }
 
-    try {
-      Future<LDClient> future = LDClient.init(application, ldConfig, user);
-      ldClient = future.get();
-    } catch (Exception e) {
-      throw new Exception(e);
-    }
+    Future<LDClient> future = LDClient.init(application, ldConfig, user);
+    ldClient = future.get();
   }
 
   @ReactMethod
