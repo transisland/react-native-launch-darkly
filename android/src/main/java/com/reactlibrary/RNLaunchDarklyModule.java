@@ -134,4 +134,11 @@ public class RNLaunchDarklyModule extends ReactContextBaseJavaModule {
     String variationResult = ldClient != null ? ldClient.stringVariation(flagName, fallback) : fallback;
     callback.invoke(variationResult);
   }
+
+  @ReactMethod
+  public void track(String goalName) {
+    if (ldClient != null) {
+      ldClient.track(goalName);
+    }
+  }
 }
