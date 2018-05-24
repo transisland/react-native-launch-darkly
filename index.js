@@ -24,8 +24,8 @@ class LaunchDarkly {
     RNLaunchDarkly.stringVariation(featureName, fallback, callback);
   }
 
-  track (goalName) {
-    RNLaunchDarkly.track(goalName);
+  track (goalName, data) {
+    RNLaunchDarkly.track(goalName, data);
   }
 
   addFeatureFlagChangeListener (featureName, callback) {

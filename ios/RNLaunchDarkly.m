@@ -80,9 +80,9 @@ RCT_EXPORT_METHOD(stringVariation:(NSString*)flagName fallback:(NSString*)fallba
     callback(@[flagValue]);
 }
 
-RCT_EXPORT_METHOD(track:(NSString*)goalName)
+RCT_EXPORT_METHOD(track:(NSString*)goalName data:(NSDictionary *)data)
 {
-    [[LDClient sharedInstance] track:goalName];
+    [[LDClient sharedInstance] track:goalName data:data];
 }
 
 - (void)handleFeatureFlagChange:(NSNotification *)notification
