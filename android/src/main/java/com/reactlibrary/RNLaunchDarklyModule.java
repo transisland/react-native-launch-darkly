@@ -13,15 +13,16 @@ import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 import com.launchdarkly.android.FeatureFlagChangeListener;
 import com.launchdarkly.android.LDClient;
 import com.launchdarkly.android.LDConfig;
 import com.launchdarkly.android.LDUser;
 import com.launchdarkly.android.LaunchDarklyException;
 
-import java.util.Collections;
 import java.util.concurrent.Future;
-import java.util.concurrent.ExecutionException;
 
 public class RNLaunchDarklyModule extends ReactContextBaseJavaModule {
 
@@ -133,5 +134,18 @@ public class RNLaunchDarklyModule extends ReactContextBaseJavaModule {
   public void stringVariation(String flagName, String fallback, Callback callback) {
     String variationResult = ldClient != null ? ldClient.stringVariation(flagName, fallback) : fallback;
     callback.invoke(variationResult);
+  }
+
+  @ReactMethod
+  public void track(String goalName, ReadableMap data) {
+    if (ldClient != null) {
+      Gson json = new GsonBuilder().create();
+      try {
+        JsonObject result = json.toJsonTree(data.toHashMap()).getAsJsonObject();
+        ldClient.track(goalName, result);
+      } catch (Exception e) {
+        Log.d("RNLaunchDarklyModule", e.getMessage());
+      }
+    }
   }
 }
