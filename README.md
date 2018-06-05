@@ -76,7 +76,9 @@ type User = {
 };
 
 // init native SDK with api key and user object
-LaunchDarkly.configure(apiKey: string, user: User);
+LaunchDarkly.configure(apiKey: string, user: User)
+    .then(() => { // LaunchDarkly successfully initialized here })
+    .catch((error) => { // process error here })
 
 // get boolean feature flag value
 LaunchDarkly.boolVariation(featureFlagName: string, callback: function): bool
